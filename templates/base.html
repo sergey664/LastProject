@@ -4,27 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Библиотека Онлайн</title>
-    <link rel="stylesheet" href="../static/styles/base.css">
+    <link rel="stylesheet" href="../static/styles/base_style.css">
+    {% if file %}
+    <link rel="stylesheet" href="../static/styles/{{ file }}">
+    {% endif %}
 </head>
 <body>
     <header class="header">
-        <h1>Библиотека Онлайн</h1>
-        <nav>
-            <ul class="nav-menu">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="search.html">Поиск</a></li>
-                <li><a href="categories.html">Категории</a></li>
-                <li><a href="account.html">Личный кабинет</a></li>
-                <li><a href="upload.html">Загрузить книгу</a></li>
-            </ul>
-        </nav>
+        <h1 class="site-title">Bookery</h1>
     </header>
 
-    <main>
+    <main class="content">
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>&copy; 2025 Библиотека Онлайн. Все права защищены.</p>
     </footer>
 </body>

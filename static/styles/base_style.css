@@ -1,0 +1,39 @@
+.header {
+    background-color: #8b5a2b;
+    color: #fff;
+    padding: 15px;
+    font-family: 'Merriweather', serif;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease-in-out;
+}
+.header:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: #f5f1e7;
+    font-family: 'Merriweather', serif;
+    color: #3e3a33;
+    margin: 0;
+    padding: 0;
+    transition: background 0.5s ease-in-out;
+}
+
+.footer {
+    background-color: #8b5a2b;
+    color: white;
+    text-align: left;
+    padding: 20px;
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 98.1%;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+}
+.footer p {
+    margin: 0;
+}
