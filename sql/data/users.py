@@ -1,22 +1,23 @@
-import sqlalchemy as sa
-from .db_session import SqlAlchemyBase
-from sqlalchemy import orm
+import sqlalchemy
+from session import SqlAlchemyBase
+from sqlalchemy_serializer import SerializerMixin
+from flask_login import UserMixin
+
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class UserType(SqlAlchemyBase):
-    __tablename__ = 'user_types'
+class User(SqlAlchemyBase, SerializerMixin, UserMixin):
+    __tablename__ = "users"
 
-    type_id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    type_name = sa.Column(sa.String)
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    email = sqlalchemy.Column(sqlalchemy.String, unique=True)
+    password = sqlalchemy.Column(sqlalchemy.String, unique=True)
+    is_admin = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
+    nickname = sqlalchemy.Column(sqlalchemy.String, unique=True)
 
-class User(SqlAlchemyBase):
-    __tablename__ = 'users'
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
 
-    user_id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    user_name = sa.Column(sa.String, unique=True)
-    user_email = sa.Column(sa.String, unique=True)
-    user_password = sa.Column(sa.String, unique=True)
-
-    user_type = sa.Column(sa.Integer, sa.ForeignKey("user_types.type_id"))
-    users = orm.relationship('UserType')
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
