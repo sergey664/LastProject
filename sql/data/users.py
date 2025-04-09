@@ -1,5 +1,5 @@
 import sqlalchemy
-from session import SqlAlchemyBase
+from .session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
 from flask_login import UserMixin
 
