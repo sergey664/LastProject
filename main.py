@@ -4,6 +4,7 @@ import flask_login
 import flask_restful
 from sql.data import session, register, login, users
 from api.users import user_resource
+from api.books import book_resource, author_resource, genre_resource
 
 app = flask.Flask(__name__)
 api = flask_restful.Api(app)
@@ -67,8 +68,19 @@ def index():
 
 def main():
     session.global_init("sql/db/bookery.db")
+
     api.add_resource(user_resource.UsersListResource, "/api/users")
     api.add_resource(user_resource.UsersResource, "/api/user/<int:user_id>")
+
+    api.add_resource(genre_resource.GenresListResource, "/api/genres")
+    api.add_resource(genre_resource.GenresResource, "/api/genre/<int:genre_id>")
+
+    api.add_resource(author_resource.AuthorsListResource, "/api/authors")
+    api.add_resource(author_resource.AuthorsResource, "/api/author/<int:author_id>")
+
+    api.add_resource(book_resource.BooksListResource, "/api/books")
+    api.add_resource(book_resource.BooksResource, "/api/book/<int:book_id>")
+
     app.run()
 
 
