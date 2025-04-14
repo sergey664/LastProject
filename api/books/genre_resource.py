@@ -41,3 +41,13 @@ class GenresListResource(Resource):
         session.commit()
 
         return flask.jsonify({"id": genre.id})
+
+
+class BooksGenresListResource(Resource):
+    def get(self, book_id):
+        check_request(books.Book, book_id)
+        session = create_session()
+        books_genres = session.query(books.Genre).join(books.BooksGenres).join(books.Book).filter(books.Book.id == book_id).all()
+
+        return flask.jsonify({"books_genres": item.to_dict(only=("name", ))
+                              for item in books_genres})

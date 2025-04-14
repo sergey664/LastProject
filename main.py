@@ -2,7 +2,7 @@ import flask
 import requests
 import flask_login
 import flask_restful
-from sql.data import session, register, login, users
+from sql.data import session, register, login, users, books
 from api.users import user_resource
 from api.books import book_resource, author_resource, genre_resource
 
@@ -83,6 +83,9 @@ def main():
 
     api.add_resource(book_resource.AuthorsBooksListResource, "/api/authors_books/<int:author_id>")
     api.add_resource(author_resource.BooksAuthorsListResource, "/api/books_authors/<int:book_id>")
+
+    api.add_resource(book_resource.GenreBooksListResource, "/api/genre_books/<int:genre_id>")
+    api.add_resource(genre_resource.BooksGenresListResource, "/api/books_genres/<int:book_id>")
 
     app.run()
 
