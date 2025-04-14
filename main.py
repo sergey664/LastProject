@@ -81,6 +81,9 @@ def main():
     api.add_resource(book_resource.BooksListResource, "/api/books")
     api.add_resource(book_resource.BooksResource, "/api/book/<int:book_id>")
 
+    api.add_resource(book_resource.AuthorsBooksListResource, "/api/authors_books/<int:author_id>")
+    api.add_resource(author_resource.BooksAuthorsListResource, "/api/books_authors/<int:book_id>")
+
     app.run()
 
 

@@ -29,10 +29,8 @@ class BooksListResource(Resource):
     def get(self):
         session = create_session()
         all_books = session.query(books.Book).all()
-        return flask.jsonify({"books": [item.to_dict(only=("title",
-                                                           "birthday",
-                                                           "description",
-                                                           "file")) for item in all_books]})
+        return flask.jsonify({"books": [item.to_dict(only=("title", "birthday", "description", "file"))
+                                        for item in all_books]})
 
     def post(self):
         args = parser.parse_args()
@@ -47,3 +45,13 @@ class BooksListResource(Resource):
         session.commit()
 
         return flask.jsonify({"id": book.id})
+
+
+class AuthorsBooksListResource(Resource):
+    def get(self, author_id):
+        check_request(books.Author, author_id)
+        session = create_session()
+        authors_books = session.query(books.Book).join(books.BooksAuthors).join(books.Author).filter(books.Author.id == author_id).all()
+
+        return flask.jsonify({"authors-books": item.to_dict(only=("title", "birthday", "description", "file"))
+                              for item in authors_books})

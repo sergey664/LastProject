@@ -43,3 +43,14 @@ class AuthorsListResource(Resource):
         session.commit()
 
         return flask.jsonify({"id": author.id})
+
+
+class BooksAuthorsListResource(Resource):
+    def get(self, book_id):
+        check_request(books.Author, book_id)
+        session = create_session()
+        authors_books = session.query(books.Author).join(books.BooksAuthors).join(books.Book).filter(
+            books.Book.id == book_id).all()
+
+        return flask.jsonify({"books-authors": item.to_dict(only=("name", "birthday"))
+                              for item in authors_books})
