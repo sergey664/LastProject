@@ -2,7 +2,7 @@ import flask
 import requests
 import flask_login
 import flask_restful
-from sql.data import session, register, login, users, add_author, add_genre
+from sql.data import session, register, login, users, authors, genres
 from api.users import user_resource
 from api.books import book_resource, author_resource, genre_resource
 
@@ -75,30 +75,29 @@ def logout_user():
 
 @app.route("/add_genre", methods=["GET", "POST"])
 @flask_login.login_required
-def add_author():
-    author_form = add_author.AuthorForm()
+def add_genre():
+    genre_form = genres.GenreForm()
 
-    if author_form.validate_on_submit():
+    if genre_form.validate_on_submit():
         data = {
-            "name": author_form.name.data,
-            "birthday": author_form.birthday.data
+            "name": genre_form.name.data
         }
-        requests.post(flask.request.url_root.rstrip("/") + "/api/users", json=data)
+        requests.post(flask.request.url_root.rstrip("/") + "/api/genres", json=data)
 
-    return flask.render_template("add_author.html", form=author_form)
+    return flask.render_template("add_genre.html", form=genre_form)
 
 
 @app.route("/add_author", methods=["GET", "POST"])
 @flask_login.login_required
 def add_author():
-    author_form = add_author.AuthorForm()
+    author_form = authors.AuthorForm()
 
     if author_form.validate_on_submit():
         data = {
             "name": author_form.name.data,
-            "birthday": author_form.birthday.data
+            "birthday": str(author_form.birthday.data)
         }
-        requests.post(flask.request.url_root.rstrip("/") + "/api/users", json=data)
+        requests.post(flask.request.url_root.rstrip("/") + "/api/authors", json=data)
 
     return flask.render_template("add_author.html", form=author_form)
 

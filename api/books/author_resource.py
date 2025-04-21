@@ -1,3 +1,5 @@
+import datetime as dt
+
 import flask
 from flask_restful import Resource
 from sql.data.session import create_session
@@ -37,7 +39,7 @@ class AuthorsListResource(Resource):
         session = create_session()
         author = books.Author()
         author.name = args["name"]
-        author.birthday = author["birthday"]
+        author.birthday = dt.datetime.strptime(args["birthday"], "%Y-%m-%d").date()
 
         session.add(author)
         session.commit()

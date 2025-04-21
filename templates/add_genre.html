@@ -1,21 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Добавить автора</h1>
+    <h1>Добавить жанр</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
             {{ form.name.label }}<br>
             {{ form.name(class="form-control") }}<br>
             {% for error in form.name.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        <p>
-            {{ form.birthday.label }}<br>
-            {{ form.birthday(class="form-control") }}<br>
-            {% for error in form.birthday.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
