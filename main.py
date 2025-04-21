@@ -2,7 +2,7 @@ import flask
 import requests
 import flask_login
 import flask_restful
-from sql.data import session, register, login, users, books
+from sql.data import session, register, login, users, add_author, add_genre
 from api.users import user_resource
 from api.books import book_resource, author_resource, genre_resource
 
@@ -71,6 +71,36 @@ def login_user():
 def logout_user():
     flask_login.logout_user()
     return flask.redirect("/")
+
+
+@app.route("/add_genre", methods=["GET", "POST"])
+@flask_login.login_required
+def add_author():
+    author_form = add_author.AuthorForm()
+
+    if author_form.validate_on_submit():
+        data = {
+            "name": author_form.name.data,
+            "birthday": author_form.birthday.data
+        }
+        requests.post(flask.request.url_root.rstrip("/") + "/api/users", json=data)
+
+    return flask.render_template("add_author.html", form=author_form)
+
+
+@app.route("/add_author", methods=["GET", "POST"])
+@flask_login.login_required
+def add_author():
+    author_form = add_author.AuthorForm()
+
+    if author_form.validate_on_submit():
+        data = {
+            "name": author_form.name.data,
+            "birthday": author_form.birthday.data
+        }
+        requests.post(flask.request.url_root.rstrip("/") + "/api/users", json=data)
+
+    return flask.render_template("add_author.html", form=author_form)
 
 
 @app.route("/")

@@ -44,7 +44,7 @@ class Book(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String)
-    birthday = sqlalchemy.Column(sqlalchemy.Date)
+    year = sqlalchemy.Column(sqlalchemy.String)
     description = sqlalchemy.Column(sqlalchemy.String, unique=True)
     file = sqlalchemy.Column(sqlalchemy.String)
 
