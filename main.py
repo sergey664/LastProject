@@ -13,6 +13,18 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
 
+@app.errorhandler(404)
+def error_404(e):
+    return flask.render_template("error.html", text="Увы! Страница, которую вы ищете, не существует.",
+                                 e=404, file="error.css")
+
+
+@app.errorhandler(500)
+def error_404(e):
+    return flask.render_template("error.html", text="Упс! Что-то пошло не так...",
+                                 e=500, file="error.css")
+
+
 @login_manager.user_loader
 def load_user(user_id):
     connection = session.create_session()

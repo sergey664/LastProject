@@ -1,0 +1,45 @@
+.error-page {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #b00020;
+  background-color: #fff1f1;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.error-page h1 {
+  font-size: 6rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.error-page p {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.error-page a {
+  display: inline-block;
+  background-color: #ff1744;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.error-page a:hover {
+  background-color: #d50000;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
