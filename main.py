@@ -2,7 +2,7 @@ import flask
 import requests
 import flask_login
 import flask_restful
-from sql.data import session, register, login, users, authors, genres
+from sql.data import session, register, login, users, add_authors, add_genres
 from api.users import user_resource
 from api.books import book_resource, author_resource, genre_resource
 
@@ -100,6 +100,25 @@ def add_author():
         requests.post(flask.request.url_root.rstrip("/") + "/api/authors", json=data)
 
     return flask.render_template("add_author.html", form=author_form)
+
+
+@app.route("/add_book", methods=["GET", "POST"])
+@flask_login.login_required
+def add_book():
+    pass
+
+
+@app.route("/book/<string:book_id>")
+@flask_login.login_required
+def display_book(book_id):
+    book = requests.get(flask.request.url_root.rstrip("/") + "/api/book/" + book_id)
+    return flask.render_template("book.html", book=book)
+
+
+@app.route("/download/<string:file_path>")
+@flask_login.login_required
+def download(file_path):
+    return flask.send_file("files/" + file_path, as_attachment=True)
 
 
 @app.route("/")
