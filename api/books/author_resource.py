@@ -15,7 +15,7 @@ class AuthorsResource(Resource):
         session = create_session()
         author = session.query(books.Author).get(author_id)
 
-        return flask.jsonify({"author": author.to_dict(only=("name", "birthday"))})
+        return flask.jsonify({"author": author.to_dict(only=("id", "name", "birthday"))})
 
     def delete(self, author_id):
         check_request(books.Author, author_id)
@@ -31,7 +31,8 @@ class AuthorsListResource(Resource):
     def get(self):
         session = create_session()
         all_authors = session.query(books.Author).all()
-        return flask.jsonify({"authors": [item.to_dict(only=("name",
+        return flask.jsonify({"authors": [item.to_dict(only=("id",
+                                                             "name",
                                                              "birthday")) for item in all_authors]})
 
     def post(self):
@@ -54,5 +55,5 @@ class BooksAuthorsListResource(Resource):
         authors_books = session.query(books.Author).join(books.BooksAuthors).join(books.Book).filter(
             books.Book.id == book_id).all()
 
-        return flask.jsonify({"books-authors": item.to_dict(only=("name", "birthday"))
+        return flask.jsonify({"books-authors": item.to_dict(only=("id", "name", "birthday"))
                               for item in authors_books})

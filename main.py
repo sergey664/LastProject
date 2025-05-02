@@ -1,14 +1,18 @@
+import os
+
 import flask
+import werkzeug.utils
 import requests
 import flask_login
 import flask_restful
-from sql.data import session, register, login, users, add_authors, add_genres
+from sql.data import session, register, login, users, add_authors, add_genres, add_books
 from api.users import user_resource
 from api.books import book_resource, author_resource, genre_resource
 
 app = flask.Flask(__name__)
 api = flask_restful.Api(app)
 app.config["SECRET_KEY"] = "yandexlyceum_secret_key"
+app.config["UPLOAD_FOLDER"] = "books_files"
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
@@ -76,7 +80,7 @@ def logout_user():
 @app.route("/add_genre", methods=["GET", "POST"])
 @flask_login.login_required
 def add_genre():
-    genre_form = genres.GenreForm()
+    genre_form = add_genres.GenreForm()
 
     if genre_form.validate_on_submit():
         data = {
@@ -90,7 +94,7 @@ def add_genre():
 @app.route("/add_author", methods=["GET", "POST"])
 @flask_login.login_required
 def add_author():
-    author_form = authors.AuthorForm()
+    author_form = add_authors.AuthorForm()
 
     if author_form.validate_on_submit():
         data = {
@@ -105,20 +109,43 @@ def add_author():
 @app.route("/add_book", methods=["GET", "POST"])
 @flask_login.login_required
 def add_book():
-    pass
+    book_form = add_books.BookForm()
+    authors = requests.get(flask.request.url_root.rstrip("/") + "/api/authors").json()["authors"]
+    genres = requests.get(flask.request.url_root.rstrip("/") + "/api/genres").json()["genres"]
+    book_form.authors.choices = [(author["id"], author["name"]) for author in authors]
+    book_form.genres.choices = [(genre["id"], genre["name"]) for genre in genres]
+
+    if book_form.validate_on_submit():
+        file = book_form.file.data
+        data = {
+            "title": book_form.title.data,
+            "year": book_form.year.data,
+            "description": book_form.description.data,
+            "authors": book_form.authors.data,
+            "genres": book_form.genres.data,
+            "file": file.filename
+        }
+
+        requests.post(flask.request.url_root.rstrip("/") + "/api/books", json=data)
+
+        filename = werkzeug.utils.secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    return flask.render_template("add_book.html", form=book_form)
 
 
 @app.route("/book/<string:book_id>")
 @flask_login.login_required
 def display_book(book_id):
-    book = requests.get(flask.request.url_root.rstrip("/") + "/api/book/" + book_id)
+    book = requests.get(flask.request.url_root.rstrip("/") + "/api/book/" + book_id).json()["book"]
+    print(book)
     return flask.render_template("book.html", book=book)
 
 
-@app.route("/download/<string:file_path>")
+@app.route("/book/download/<string:file_path>")
 @flask_login.login_required
 def download(file_path):
-    return flask.send_file("files/" + file_path, as_attachment=True)
+    return flask.send_file(os.path.join(app.config['UPLOAD_FOLDER'], file_path), as_attachment=True)
 
 
 @app.route("/")

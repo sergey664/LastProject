@@ -13,7 +13,7 @@ class GenresResource(Resource):
         session = create_session()
         genre = session.query(books.Genre).get(genre_id)
 
-        return flask.jsonify({"genre": genre.to_dict(only=("name", ))})
+        return flask.jsonify({"genre": genre.to_dict(only=("id", "name"))})
 
     def delete(self, genre_id):
         check_request(books.Genre, genre_id)
@@ -29,7 +29,7 @@ class GenresListResource(Resource):
     def get(self):
         session = create_session()
         all_genres = session.query(books.Genre).all()
-        return flask.jsonify({"genres": [item.to_dict(only=("name", )) for item in all_genres]})
+        return flask.jsonify({"genres": [item.to_dict(only=("id", "name")) for item in all_genres]})
 
     def post(self):
         args = parser.parse_args()
