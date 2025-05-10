@@ -1,11 +1,12 @@
 import os
+import random
 
 import flask
 import werkzeug.utils
 import requests
 import flask_login
 import flask_restful
-from sql.data import session, register, login, users, add_authors, add_genres, add_books
+from sql.data import session, register, login, users, add_authors, add_genres, add_books, findline, books
 from api.users import user_resource
 from api.books import book_resource, author_resource, genre_resource
 
@@ -138,7 +139,12 @@ def add_book():
 @flask_login.login_required
 def display_book(book_id):
     book = requests.get(flask.request.url_root.rstrip("/") + "/api/book/" + book_id).json()["book"]
-    print(book)
+    authors = requests.get(flask.request.url_root.rstrip("/") + "/api/books_authors/" + book_id).json()["books-authors"]
+    genres = requests.get(flask.request.url_root.rstrip("/") + "/api/books_genres/" + book_id).json()["books-genres"]
+
+    book["authors"] = [author["name"] for author in authors]
+    book["genres"] = [genre["name"] for genre in genres]
+
     return flask.render_template("book.html", book=book)
 
 
@@ -148,9 +154,44 @@ def download(file_path):
     return flask.send_file(os.path.join(app.config['UPLOAD_FOLDER'], file_path), as_attachment=True)
 
 
-@app.route("/")
+@app.route("/author/<string:author_id>")
+@flask_login.login_required
+def display_author(author_id):
+    author = requests.get(flask.request.url_root.rstrip("/") + "/api/author/" + author_id).json()["author"]
+    books = requests.get(flask.request.url_root.rstrip("/") + "/api/authors_books/" + author_id).json()["authors-books"]
+
+    author["books"] = [{"id": book["id"], "title": book["title"]} for book in books]
+
+    return flask.render_template("author.html", author=author)
+
+
+@flask_login.login_required
+def find(string):
+    connection = session.create_session()
+    found_books = connection.query(books.Book).filter((books.Book.title.like(f"%{string}%"))).all()
+    found_authors = connection.query(books.Author).filter((books.Author.name.like(f"%{string}%"))).all()
+
+    return found_books, found_authors
+
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return flask.render_template("index.html")
+    find_form = findline.FindForm()
+
+    random_books = requests.get(flask.request.url_root.rstrip("/") + "/api/books").json()["books"]
+    random.shuffle(random_books)
+
+    if find_form.validate_on_submit():
+        string = find_form.string.data
+        found_books, found_authors = find(string)
+
+        return flask.render_template("index.html", form=find_form,
+                                     query=string,
+                                     books=found_books,
+                                     random_books=random_books[:3])
+
+    return flask.render_template("index.html", form=find_form,
+                                 random_books=random_books[:3])
 
 
 def main():

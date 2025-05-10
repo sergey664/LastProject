@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <h1 class="card-title">{{ author.name }}</h1>
+        <p><strong>Дата рождения:</strong> {{ author.birthday }}</p>
+
+        <p><strong>Книги:</strong></p>
+        <ul>
+            {% for book in author.books %}
+                <li><a href="../book/{{ book.id }}">{{ book.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

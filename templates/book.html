@@ -3,7 +3,11 @@
 <div class="container mt-5">
     <div class="card shadow-sm p-4">
         <h1 class="card-title">{{ book.title }}</h1>
-        <h5 class="text-muted mb-3">Автор: {{ book.author }} | Год: {{ book.year }}</h5>
+        <p><strong>Авторы:</strong>
+            {% for author in book.authors %}
+                <span class="badge bg-secondary me-1">{{ author }}</span>
+            {% endfor %}
+        </p>
         
         <p class="card-text"><strong>Описание:</strong> {{ book.description }}</p>
         

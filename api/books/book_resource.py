@@ -13,7 +13,7 @@ class BooksResource(Resource):
         session = create_session()
         book = session.query(books.Book).get(book_id)
 
-        return flask.jsonify({"book": book.to_dict(only=("title", "year", "description", "file"))})
+        return flask.jsonify({"book": book.to_dict(only=("id", "title", "year", "description", "file"))})
 
     def delete(self, book_id):
         check_request(books.Book, book_id)
@@ -29,7 +29,7 @@ class BooksListResource(Resource):
     def get(self):
         session = create_session()
         all_books = session.query(books.Book).all()
-        return flask.jsonify({"books": [item.to_dict(only=("title", "year", "description", "file"))
+        return flask.jsonify({"books": [item.to_dict(only=("id", "title", "year", "description", "file"))
                                         for item in all_books]})
 
     def post(self):
@@ -57,8 +57,8 @@ class AuthorsBooksListResource(Resource):
         session = create_session()
         authors_books = session.query(books.Book).join(books.BooksAuthors).join(books.Author).filter(books.Author.id == author_id).all()
 
-        return flask.jsonify({"authors-books": item.to_dict(only=("title", "year", "description", "file"))
-                              for item in authors_books})
+        return flask.jsonify({"authors-books": [item.to_dict(only=("id", "title", "year", "description", "file"))
+                              for item in authors_books]})
 
 
 class GenreBooksListResource(Resource):
@@ -67,5 +67,5 @@ class GenreBooksListResource(Resource):
         session = create_session()
         genre_books = session.query(books.Book).join(books.BooksGenres).join(books.Genre).filter(books.Genre.id == genre_id).all()
 
-        return flask.jsonify({"genre-books": item.to_dict(only=("title", "year", "description", "file"))
-                              for item in genre_books})
+        return flask.jsonify({"genre-books": [item.to_dict(only=("id", "title", "year", "description", "file"))
+                              for item in genre_books]})
