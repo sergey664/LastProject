@@ -19,13 +19,13 @@ login_manager.init_app(app)
 
 
 @app.errorhandler(404)
-def error_404(e):
+def error_404(_e):
     return flask.render_template("error.html", text="Увы! Страница, которую вы ищете, не существует.",
                                  e=404, file="error.css")
 
 
 @app.errorhandler(500)
-def error_404(e):
+def error_404(_e):
     return flask.render_template("error.html", text="Упс! Что-то пошло не так...",
                                  e=500, file="error.css")
 
@@ -135,6 +135,14 @@ def add_book():
     return flask.render_template("add_book.html", form=book_form)
 
 
+@app.route("/books")
+@flask_login.login_required
+def display_books():
+    displayed_books = requests.get(flask.request.url_root.rstrip("/") + "/api/books").json()["books"]
+
+    return flask.render_template("books.html", books=displayed_books)
+
+
 @app.route("/book/<string:book_id>")
 @flask_login.login_required
 def display_book(book_id):
@@ -151,16 +159,17 @@ def display_book(book_id):
 @app.route("/book/download/<string:file_path>")
 @flask_login.login_required
 def download(file_path):
-    return flask.send_file(os.path.join(app.config['UPLOAD_FOLDER'], file_path), as_attachment=True)
+    return flask.send_file(str(os.path.join(app.config['UPLOAD_FOLDER'], file_path)), as_attachment=True)
 
 
 @app.route("/author/<string:author_id>")
 @flask_login.login_required
 def display_author(author_id):
     author = requests.get(flask.request.url_root.rstrip("/") + "/api/author/" + author_id).json()["author"]
-    books = requests.get(flask.request.url_root.rstrip("/") + "/api/authors_books/" + author_id).json()["authors-books"]
+    authors_books = requests.get(flask.request.url_root.rstrip("/") +
+                                 "/api/authors_books/" + author_id).json()["authors-books"]
 
-    author["books"] = [{"id": book["id"], "title": book["title"]} for book in books]
+    author["books"] = [{"id": book["id"], "title": book["title"]} for book in authors_books]
 
     return flask.render_template("author.html", author=author)
 

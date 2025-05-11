@@ -27,17 +27,17 @@
             <h1 class="navigation">Навигация</h1>
             <ul>
                 {% if current_user.is_authenticated %}
-                    <li><a class="list-link"  href="/logout">{{ current_user.nickname }}</a></li>
+                    <li><a class="list-link"  href="../logout">{{ current_user.nickname }}</a></li>
                 {% else %}
-                    <li><a class="list-link"  href="/register">Зарегистрироваться</a></li>
-                    <li><a class="list-link"  href="/login">Войти</a></li>
+                    <li><a class="list-link"  href="../register">Зарегистрироваться</a></li>
+                    <li><a class="list-link"  href="../login">Войти</a></li>
                 {% endif %}
-                <li><a class="list-link" href="api/genres">Жанры</a></li>
-                <li><a class="list-link" href="api/authors">Авторы</a></li>
-                <li><a class="list-link" href="api/books">Книги</a></li>
-                <li><a class="list-link" href="add_genre">Добавить жанр</a></li>
-                <li><a class="list-link" href="add_author">Добавить автора</a></li>
-                <li><a class="list-link" href="add_book">Добавить книгу</a></li>
+                <li><a class="list-link" href="../api/genres">Жанры</a></li>
+                <li><a class="list-link" href="../api/authors">Авторы</a></li>
+                <li><a class="list-link" href="../api/books">Книги</a></li>
+                <li><a class="list-link" href="../add_genre">Добавить жанр</a></li>
+                <li><a class="list-link" href="../add_author">Добавить автора</a></li>
+                <li><a class="list-link" href="../add_book">Добавить книгу</a></li>
             </ul>
         </div>
         <div class="right-column">
