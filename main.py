@@ -135,6 +135,22 @@ def add_book():
     return flask.render_template("add_book.html", form=book_form)
 
 
+@app.route("/genres")
+@flask_login.login_required
+def display_authors():
+    displayed_authors = requests.get(flask.request.url_root.rstrip("/") + "/api/genres").json()["genres"]
+
+    return flask.render_template("authors.html", authors=displayed_authors)
+
+
+@app.route("/authors")
+@flask_login.login_required
+def display_authors():
+    displayed_authors = requests.get(flask.request.url_root.rstrip("/") + "/api/authors").json()["authors"]
+
+    return flask.render_template("authors.html", authors=displayed_authors)
+
+
 @app.route("/books")
 @flask_login.login_required
 def display_books():
