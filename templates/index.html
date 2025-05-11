@@ -2,37 +2,32 @@
 
 {% block content %}
 
-<div class="layout">
-  <div class="right-column">
-    <form method="POST">
-      {{ form.hidden_tag() }}
-      {{ form.string.label }}<br>
-      {{ form.string() }}
-      {{ form.submit() }}
-    </form>
-
-    <div class="results">
-      {% if query %}
-        <h4>Результаты поиска для "{{ query }}":</h4>
-        {% if books %}
-          <ul>
-            {% for book in books %}
-              <li><a href="../book/{{ book.id }}">{{ book.title }}</a></li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>Ничего не найдено.</p>
-        {% endif %}
-      {% else %}
-        <h4>Случайные книги:</h4>
-        <ul>
-          {% for book in random_books %}
-            <li><a href="../book/{{ book.id }}">{{ book.title }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
-  </div>
+<form method="POST">
+  {{ form.hidden_tag() }}
+  <h1>{{ form.string.label }}</h1><br>
+  {{ form.string() }}
+  {{ form.submit() }}
+</form>
+<div class="results">
+  {% if query %}
+  <h2>Найденные книги</h2>
+  {% if books %}
+  <ul>
+    {% for book in books %}
+    <li><a href="../book/{{ book.id }}">{{ book.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>К сожалению, ничего не нашлось...</p>
+  {% endif %}
+  {% else %}
+  <h2>Можем вам предложить</h2>
+  <ul>
+    {% for book in random_books %}
+    <li><a href="../book/{{ book.id }}">{{ book.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 </div>
 
 {% endblock %}

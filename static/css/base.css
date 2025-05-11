@@ -28,24 +28,35 @@ body {
 
 .layout {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
     gap: 32px;
 }
 
 .left-column {
-    outline: #b6a790;
+    min-height: 100vh;
+    color: #f2f0e6;
+    background-color: #b6a790;
     padding-left: 24px;
-    width: 10%;
+    padding-top: 24px;
+    width: 15%;
+    border-right: 2px solid #7b5e3b;
 }
 
 .right-column {
-    width: 75%;
+    font-size: 24px;
+    padding-top: 24px;
+    width: 80%;
+}
+
+h1.navigation {
+    font-size: 40px;
+    font-weight: bold;
 }
 
 ul {
-    list-style-type: disc;
-    padding-left: 24px;
+    list-style-type: none;
+    padding-top: 4px;
+    padding-left: 3px;
 }
 
 ul li {
@@ -54,13 +65,12 @@ ul li {
 }
 
 a.list-link {
-    color: black;
+    color: #f2f0e6;
+    font-size: 28px;
     padding-top: 2px;
     text-decoration: none;
 }
 
 a.list-link:hover {
-    color: black;
-    padding-top: 2px;
     text-decoration: underline;
 }
