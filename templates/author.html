@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card shadow-sm p-4">
-        <h1 class="card-title">{{ author.name }}</h1>
-        <p><strong>Дата рождения:</strong> {{ author.birthday }}</p>
+<link rel="stylesheet" href="../static/css/lists.css">
+<div class="container">
+    <h1 class="card-title">{{ author.name }}</h1>
+    <p>Дата рождения: <strong>{{ author.birthday }}</strong></p>
 
-        <p><strong>Книги:</strong></p>
-        <ul>
-            {% for book in author.books %}
-                <li><a href="../book/{{ book.id }}">{{ book.title }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
+    <p>Книги:<strong>
+        {% for book in author.books %}
+            <a class="list-link" href="../book/{{ book.id }}">{{ book.title }}</a>
+        {% endfor %}
+    </strong></p>
 </div>
 {% endblock %}

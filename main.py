@@ -135,14 +135,6 @@ def add_book():
     return flask.render_template("add_book.html", form=book_form)
 
 
-@app.route("/genres")
-@flask_login.login_required
-def display_authors():
-    displayed_authors = requests.get(flask.request.url_root.rstrip("/") + "/api/genres").json()["genres"]
-
-    return flask.render_template("authors.html", authors=displayed_authors)
-
-
 @app.route("/authors")
 @flask_login.login_required
 def display_authors():
@@ -166,7 +158,7 @@ def display_book(book_id):
     authors = requests.get(flask.request.url_root.rstrip("/") + "/api/books_authors/" + book_id).json()["books-authors"]
     genres = requests.get(flask.request.url_root.rstrip("/") + "/api/books_genres/" + book_id).json()["books-genres"]
 
-    book["authors"] = [author["name"] for author in authors]
+    book["authors"] = [author for author in authors]
     book["genres"] = [genre["name"] for genre in genres]
 
     return flask.render_template("book.html", book=book)
@@ -191,7 +183,7 @@ def display_author(author_id):
 
 
 @flask_login.login_required
-def find(string):
+def find_book(string):
     connection = session.create_session()
     found_books = connection.query(books.Book).filter((books.Book.title.like(f"%{string}%"))).all()
     found_authors = connection.query(books.Author).filter((books.Author.name.like(f"%{string}%"))).all()
@@ -208,11 +200,12 @@ def index():
 
     if find_form.validate_on_submit():
         string = find_form.string.data
-        found_books, found_authors = find(string)
+        found_books, found_authors = find_book(string)
 
         return flask.render_template("index.html", form=find_form,
                                      query=string,
                                      books=found_books,
+                                     authors=found_authors,
                                      random_books=random_books[:3])
 
     return flask.render_template("index.html", form=find_form,

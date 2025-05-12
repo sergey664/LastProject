@@ -1,23 +1,23 @@
 {% extends "base.html" %}
-{% block content %}
-<div class="container mt-5">
-    <div class="card shadow-sm p-4">
-        <h1 class="card-title">{{ book.title }}</h1>
-        <p><strong>Авторы:</strong>
-            {% for author in book.authors %}
-                <span class="badge bg-secondary me-1">{{ author }}</span>
-            {% endfor %}
-        </p>
-        
-        <p class="card-text"><strong>Описание:</strong> {{ book.description }}</p>
-        
-        <p><strong>Жанры:</strong> 
-            {% for genre in book.genres %}
-                <span class="badge bg-secondary me-1">{{ genre }}</span>
-            {% endfor %}
-        </p>
 
-        <a href="download/{{ book.file }}" class="btn btn-primary mt-3" download>📥 Скачать книгу</a>
-    </div>
+{% block content %}
+<link rel="stylesheet" href="../static/css/lists.css">
+<div class="container">
+    <h1 class="card-title">{{ book.title }}({{ book.year }})</h1>
+    <p>Авторы:<strong>
+        {% for author in book.authors %}
+            <a class="list-link" href="../author/{{ author.id }}">{{ author.name }}</a>
+        {% endfor %}
+    </strong></p>
+
+    <p>Жанры:<strong>
+        {% for genre in book.genres %}
+            {{ genre }}
+        {% endfor %}
+    </strong></p>
+
+    <p class="card-text">Описание: {{ book.description }}</p>
+
+    <a href="download/{{ book.file }}" class="btn btn-primary mt-3" download>Скачать книгу</a>
 </div>
 {% endblock %}

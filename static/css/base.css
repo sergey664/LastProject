@@ -26,6 +26,20 @@ body {
     background-color: #f2f0e6;
 }
 
+.btn-primary {
+    background-color: #253f28;
+    color: #f2f0e6;
+    font-size: 20px;
+    border: none;
+    margin-bottom: 28px;
+}
+
+.btn-primary:hover {
+    background-color: #3c5839;
+    color: #f2f0e6;
+    border: none;
+}
+
 .layout {
     display: flex;
     align-items: flex-start;
@@ -64,13 +78,13 @@ ul li {
     font-size: 24px;
 }
 
-a.list-link {
+a.nav-link {
     color: #f2f0e6;
     font-size: 28px;
     padding-top: 2px;
     text-decoration: none;
 }
 
-a.list-link:hover {
+a.nav-link:hover {
     text-decoration: underline;
 }

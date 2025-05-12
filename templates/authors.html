@@ -1,21 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Список аторов</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+<link rel="stylesheet" href="../static/css/lists.css">
+<div class="container">
+  <h1>У нас есть авторы:</h1>
   <ul>
     {% for author in authors %}
       {% if author.name %}
-        <li><a href="/author/{{ author.id }}" target="_blank">{{ author.name }}</a></li>
+        <li><a class="list-link" href="/author/{{ author.id }}" target="_blank">{{ author.name }}</a></li>
       {% endif %}
     {% endfor %}
   </ul>
-</body>
-</html>
-
+</div>
 {% endblock %}
