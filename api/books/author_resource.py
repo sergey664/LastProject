@@ -17,7 +17,8 @@ class AuthorsResource(Resource):
 
         return flask.jsonify({"author": author.to_dict(only=("id", "name", "birthday"))})
 
-    def delete(self, author_id):
+    @staticmethod
+    def delete(author_id):
         check_request(books.Author, author_id)
         session = create_session()
         author = session.query(books.Author).get(author_id)

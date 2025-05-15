@@ -18,6 +18,7 @@
 
     <p class="card-text">Описание: {{ book.description }}</p>
 
-    <a href="download/{{ book.file }}" class="btn btn-primary mt-3" download>Скачать книгу</a>
+    <a href="../download/{{ book.file }}" class="btn btn-primary mt-3" download>Скачать книгу</a>
+    <a href="../delete_book/{{ book.id }}" class="btn btn-primary mt-3">Удалить книгу</a>
 </div>
 {% endblock %}

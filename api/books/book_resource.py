@@ -15,14 +15,15 @@ class BooksResource(Resource):
 
         return flask.jsonify({"book": book.to_dict(only=("id", "title", "year", "description", "file"))})
 
-    def delete(self, book_id):
+    @staticmethod
+    def delete(book_id):
         check_request(books.Book, book_id)
         session = create_session()
-        book = session.query(users.User).get(book_id)
+        book = session.query(books.Book).get(book_id)
         session.delete(book)
         session.commit()
 
-        return flask.jsonify({'success': 'OK'})
+        return flask.jsonify({'success': book.file})
 
 
 class BooksListResource(Resource):

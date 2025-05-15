@@ -1,9 +1,10 @@
 .error-page {
   text-align: center;
   padding: 4rem 2rem;
-  color: #b00020;
-  background-color: #fff1f1;
+  color: #f2f0e6;
+  background-color: #b6a790;
   animation: fadeIn 0.8s ease-in-out;
+  border-radius: 5px;
 }
 
 .error-page h1 {
@@ -19,8 +20,8 @@
 
 .error-page a {
   display: inline-block;
-  background-color: #ff1744;
-  color: white;
+  background-color: #253f28;
+  color: #f2f0e6;
   text-decoration: none;
   padding: 1rem 2rem;
   font-size: 1.25rem;
@@ -29,8 +30,8 @@
 }
 
 .error-page a:hover {
-  background-color: #d50000;
-  transform: scale(1.05);
+  background-color: #3c5839;
+  color: #f2f0e6;
 }
 
 @keyframes fadeIn {

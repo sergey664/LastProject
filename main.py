@@ -30,6 +30,12 @@ def error_404(_e):
                                  e=500, file="error.css")
 
 
+@app.errorhandler(401)
+def error_404(_e):
+    return flask.render_template("error.html", text="Вы забыли авторизоваться!",
+                                 e=401, file="error.css")
+
+
 @login_manager.user_loader
 def load_user(user_id):
     connection = session.create_session()
@@ -107,6 +113,14 @@ def add_author():
     return flask.render_template("add_author.html", form=author_form)
 
 
+@app.route("/delete_author/<int:author_id>", methods=["GET", "POST"])
+@flask_login.login_required
+def delete_author(author_id):
+    author_resource.AuthorsResource.delete(author_id)
+
+    return flask.redirect("/")
+
+
 @app.route("/add_book", methods=["GET", "POST"])
 @flask_login.login_required
 def add_book():
@@ -118,21 +132,33 @@ def add_book():
 
     if book_form.validate_on_submit():
         file = book_form.file.data
+        filename = (str(len(requests.get(flask.request.url_root.rstrip("/") + "/api/books").json()["books"])) +
+                    file.filename)
+
         data = {
             "title": book_form.title.data,
             "year": book_form.year.data,
             "description": book_form.description.data,
             "authors": book_form.authors.data,
             "genres": book_form.genres.data,
-            "file": file.filename
+            "file": filename
         }
 
         requests.post(flask.request.url_root.rstrip("/") + "/api/books", json=data)
 
-        filename = werkzeug.utils.secure_filename(file.filename)
+        filename = werkzeug.utils.secure_filename(filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     return flask.render_template("add_book.html", form=book_form)
+
+
+@app.route("/delete_book/<int:book_id>", methods=["GET", "POST"])
+@flask_login.login_required
+def delete_book(book_id):
+    file_path = book_resource.BooksResource.delete(book_id).json["success"]
+    os.remove(str(os.path.join(app.config['UPLOAD_FOLDER'], file_path)))
+
+    return flask.redirect("/")
 
 
 @app.route("/authors")
@@ -164,7 +190,7 @@ def display_book(book_id):
     return flask.render_template("book.html", book=book)
 
 
-@app.route("/book/download/<string:file_path>")
+@app.route("/download/<string:file_path>")
 @flask_login.login_required
 def download(file_path):
     return flask.send_file(str(os.path.join(app.config['UPLOAD_FOLDER'], file_path)), as_attachment=True)
